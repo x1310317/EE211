@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>cGAN pix2pix Cartoon Colorization Demo</title>
+
+		<!-- link to Bootstrap -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	</head>
+
+	<body>
+		<header class="blog-header py-3 bg-warning text-center">
+			<a class="blog-header-logo text-white">
+				<h1>cGAN pix2pix Cartoon Colorization Demo</h1>
+			</a>
+		</header>
+		<div class="py-3 text-center">
+			UCLA EE211 18 Winter Project
+		</div>
+		<div class="py-1 text-center">
+			Xuan Hu; Tianyi Liu
+		</div>
+		<br>
+		<div class="container">
+			<div class="row">
+				<div class="col-1"></div>
+				<div class="col-10">
+					<h2>Test Result</h2>
+					<hr style="width: 100%; color: black; height: 1px;" />
+					<center>
+						<canvas id="originalCvs" class="rounded float-left" style="margin-right: 4px;" width="350" height="350"></canvas>
+						<canvas id="resultCvs" class="rounded float-right" style="margin-right: 4px;" width="350" height="350"></canvas>
+					</center>
+					<br><br><br><br>
+					<center>
+						<div class="input-group mb-3" style="width: 20%">
+							<div class="input-group-prepend">
+								<label class="input-group-text" for="inputGroupSelect01">Select</label>
+							</div>
+							<select class="custom-select" id="inputGroupSelect01">
+								<option selected>Choose...</option>
+								<option value="1">One</option>
+								<option value="2">Two</option>
+								<option value="3">Three</option>
+							</select>
+						</div>
+						<br>
+						<button id="run" class="btn btn-outline-warning btn-lg">Run</button>
+						<br><br>
+						<button id="stop" class="btn btn-outline-danger btn-lg">Stop</button>
+					</center>
+				</div>
+				<div class="col-1"></div>
+			</div>
+		</div>
+		<br><br>
+		<div class="container">
+			<div class="row">
+				<div class="col-2"></div>
+				<div class="col-3">
+					<h5>Rate of Progress</h5>
+				</div>
+				<div class="col-5">
+					<div class="progress">
+						<div id = "progressbtn" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 50%"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<br><br>
+		
+		<div class="container">
+			<div class="row">
+				<div class="col-1"></div>
+				<div class="col-10">
+					<h2>Initialization</h2>
+					<hr style="width: 100%; color: black; height: 1px;" />
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-2"></div>
+				<div class="col-2">
+					<center>
+						<button id="dataset" class="btn btn-outline-warning">Dataset</button>
+					</center>
+				</div>
+				<div class="col-6">
+					<center>
+						<button id="preproccess" class="btn btn-outline-warning">Preproccess</button>
+					</center>
+				</div>
+			</div>
+		</div>
+		<br>
+		<div class="container">
+			<div class="row">
+				<div class="col-2"></div>
+				<div class="col-2">
+					<div id="dataset-box" class="card" style="visibility: hidden;">
+						<img class="card-img-top" src="test.png" alt="Card image cap">
+						<div class="card-body">
+							<center>crawler</center>
+						</div>
+					</div>
+				</div>
+				<div class="col-2">
+					<div id="facial-box" class="card" style="visibility: hidden;">
+						<img class="card-img-top" src="test.png" alt="Card image cap">
+						<div class="card-body">
+							<center>facial recognition</center>
+						</div>
+					</div>
+				</div>
+				<div class="col-2">
+					<div id="edge-box" class="card" style="visibility: hidden;">
+						<img class="card-img-top" src="test.png" alt="Card image cap">
+						<div class="card-body">
+							<center>edge detection</center>
+						</div>
+					</div>
+				</div>
+				<div class="col-2">
+					<div id="median-box" class="card" style="visibility: hidden;">
+						<img class="card-img-top" src="test.png" alt="Card image cap">
+						<div class="card-body">
+							<center>median filter</center>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<br><br>
+		<div class="container">
+			<div class="row">
+				<div class="col-1"></div>
+				<div class="col-10">
+					<h2>Trainning</h2>
+					<hr style="width: 100%; color: black; height: 1px;" />
+				</div>
+			</div>
+		</div>
+		<br>
+		<div class="container">
+			<div class="row">
+				<div class="col-2"></div>
+				<div class="col-8">
+					<center>
+						<button id="train" class="btn btn-outline-warning">Train</button>
+					</center>
+				</div>
+			</div>
+		</div>
+		<br>
+		<div class="container">
+			<div class="row">
+				<div class="col-2"></div>
+				<div class="col-2">
+					<div id="train1-box" class="card" style="visibility: hidden;">
+						<img class="card-img-top" src="test.png" alt="Card image cap">
+						<div class="card-body">
+							<center>0</center>
+						</div>
+					</div>
+				</div>
+				<div class="col-2">
+					<div id="train2-box" class="card" style="visibility: hidden;">
+						<img class="card-img-top" src="test.png" alt="Card image cap">
+						<div class="card-body">
+							<center>100000</center>
+						</div>
+					</div>
+				</div>
+				<div class="col-2">
+					<div id="train3-box" class="card" style="visibility: hidden;">
+						<img class="card-img-top" src="test.png" alt="Card image cap">
+						<div class="card-body">
+							<center>200000</center>
+						</div>
+					</div>
+				</div>
+				<div class="col-2">
+					<div id="train4-box" class="card" style="visibility: hidden;">
+						<img class="card-img-top" src="test.png" alt="Card image cap">
+						<div class="card-body">
+							<center>300000</center>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<br>
+		<div class="container">
+			<div class="row">
+				<div class="col-2"></div>
+				<div class="col-8">
+					<table class="table table-striped">
+						<tbody>
+							<tr>
+								<th scope="row">Time Passed</th>
+								<td id="time-passed"></td>
+							</tr>
+							<tr>
+								<th scope="row">Number of generations</th>
+								<td id="number-of-generations"></td>
+							</tr>
+							<tr>
+								<th scope="row">Average time per generation</th>
+								<td id="time-per-generation"></td>
+							</tr>
+							<tr>
+								<th scope="row">Average time per improvement</th>
+								<td id="time-per-improvement"></td>
+							</tr>
+							<tr>
+								<th scope="row">Current fitness</th>
+								<td id="current-fitness"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<br><br>
+		<img src="The_Girl_With_The_Pearl_Earring.png" id="originalImage" style="display: none;" />
+		<canvas id="curCvs" width="1" height="1" style="display: none;"></canvas>
+
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+		<script src="cGANcolor.js"></script>
+
+	</body>
+</html>
