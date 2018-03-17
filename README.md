@@ -8,3 +8,5 @@ image2binary.m: transfer image from color to binary
 isgray.m: delete binary image in orignal data
 
 rename.py: rename orignal data
+
+training model: https://github.com/phillipi/pix2pix
